@@ -9,7 +9,7 @@ This project build a machine learning model to predict the movie ratings based o
     - First to have an account and generate your own API key with given instructions by this link [Sign up](https://www.themoviedb.org/settings/api). The API key will be used to access movies information
     - When signing up, it will ask for application URL or the link of the project that you will use the movie database for, I did because I didn't have any link for the project: (http://127.0.0.1:5000/not/a/URL)
     
-2. Download the [dataset](.\tmdb_5000_credits.csv) to access movie id. Can be opened in excel to view the file
+2. Download the [dataset](./tmdb_5000_credits.csv) to access movie id. Can be opened in excel to view the file
 3. Set up **environment**: 
     - While collecting the data, I used the Ubuntu Linux subsystem for my Windows computer. Instead of downloading Python packages system-wide, I used virtual environment and downloaded the packages there 
     - Before creating the virtual environment, download the python3-venv by `sudo apt install python3.12-venv`, this is system-wide download
