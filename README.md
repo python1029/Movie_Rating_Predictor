@@ -54,7 +54,8 @@ Preview of Data: ![alt text](./Images/Data_Preview.png)
 - The histogram still shows the bell shape(which what we want) but with a bit skewed on the left side due to some overpredictions of ratings 
 - The sample average is also 0 
 
-**CONCLUSION:** The performance did not change based on the R^2 value after removing the non-contributing features
-So the hypothesis test indicate that the genres: Action, Animation, Comedy, Crime, Documentary, Drama, History, Horror, Science Fiction, Thriller, War do have linear relationship with movie ratings. 
-The genres-only model only explains about 10% of the actual ratings but still matters, and more features can be applied to predict the ratings data. The model shows there are still some linear relationship between the genres and the movie ratings
+**CONCLUSION:** 
+- The performance did not change based on the R^2 value after removing the non-contributing features
+- So the hypothesis test indicate that the genres: Action, Animation, Comedy, Crime, Documentary, Drama, History, Horror, Science Fiction, Thriller, War do have linear relationship with movie ratings. 
+- The genres-only model only explains about 10% of the actual ratings but still matters, and more features can be applied to predict the ratings data. The model shows there are still some linear relationship between the genres and the movie ratings
 
