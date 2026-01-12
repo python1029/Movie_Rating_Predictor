@@ -106,41 +106,40 @@ rev_hist.set_ylabel("Frequency")
 rev_hist.set_xlim(rev_bin[0],rev_bin[-1])
 
 # NOTE: ANOVA
-X_const = sm.add_constant(X_train)
+X_const = pd.DataFrame(sm.add_constant(X_train)) # Convert to DataFrame for easier dropping columns later
 # fit the model, OLS = Ordinary Least Square, or simple linear regression 
 ratings_model = sm.OLS(ratings_train,X_const).fit() #OLS fit() , does the math: R square, F statistic, etc. 
-rev_model_OLS = sm.OLS(rev_train, X_const).fit()
+# rev_model_OLS = sm.OLS(rev_train, X_const).fit()
 
 features_to_drop= []
 # NOTE: droping highest p-values regressors 
 while True: 
     ratings_p_values= ratings_model.pvalues.drop('const') # drop p-value of Beta_naught
-    max_p_feature=  ratings_p_values.idxmax()
-    features_to_drop.append(max_p_feature)
-
+    max_p_feature=  ratings_p_values.idxmax() # filter out the feature with largest p-value 
     max_p_val = ratings_p_values[max_p_feature]
     print(f"Max p-value: {max_p_val:.4f} for feature: {max_p_feature}")
-    if max_p_val > 0.05: X_const = X_const.drop(columns=max_p_feature)
+    if ratings_p_values[max_p_feature] > 0.05: 
+        features_to_drop.append(max_p_feature) # append to list of features to drop
+        X_const = X_const.drop(columns=max_p_feature, axis=1)
+        ratings_model = sm.OLS(ratings_train,X_const).fit()
     else: break
-    ratings_model = sm.OLS(ratings_train,X_const).fit()
 
-
-X_adjust = X.drop(features_to_drop, axis=1)
+X_train_adjust = X_train.drop(columns=features_to_drop, axis=1) # adjusted training set
+X_test_adjust = X_test.drop(columns=features_to_drop, axis=1) # adjusted test set
 
 # NOTE: retrain the model after removing the non-contributing genres
-X_train, X_test, ratings_train, ratings_test = train_test_split(X_adjust , ratings , test_size=0.2, random_state=42)
-linear_regression_model.fit(X_train, ratings_train)
-test_score = linear_regression_model.score(X_test,ratings_test)
-train_score = linear_regression_model.score(X_train, ratings_train)
+linear_regression_model.fit(X_train_adjust, ratings_train) # refit the model
+train_score = linear_regression_model.score(X_train_adjust, ratings_train)
+test_score = linear_regression_model.score(X_test_adjust,ratings_test)
 print("Comparing the R^2 of test and train set")
 print(f"R^2 score on test set: {test_score:.4f}")
 print(f"R^2 score on train set: {train_score:.4f} ")
 
 
-ratings_hat = linear_regression_model.predict(X=X_train)
-residual = ratings_train - ratings_hat
+ratings_hat = linear_regression_model.predict(X=X_train_adjust) # adjusted y_hat
+residual = ratings_train - ratings_hat # adjusted residuals
 
-# NOTE: Set up plot for Ratings 
+# # NOTE: Set up plot for Ratings 
 fig, axs = plt.subplots(nrows=1, ncols=2, figsize= (12,5))
 
 axs[0].scatter(ratings_hat, residual, color="blue", label="Residual vs. y_hat")
@@ -160,20 +159,20 @@ axs[1].set_xlabel("Residual value")
 axs[1].set_ylabel("Frequency")
 axs[1].set_xlim(bin[0],bin[-1])
 
-# fig.savefig('adjusted_ratings_residual_plot.png')
+fig.savefig('adjusted_ratings_residual_plot.png')
 
-# plt.tight_layout()
-# plt.show()
+plt.tight_layout()
+plt.show()
 
-# NOTE: turn ANOVA into image 
+# # NOTE: turn ANOVA into image 
 fig3, OLS_rating = plt.subplots()
 OLS_rating.axis("off") # no axes 
 
 OLS_rating.text(0,1, ratings_model.summary().as_text(), fontsize=10, fontfamily='monospace', va='top')
-# fig3.savefig("adjusted_OLS_ratings.png",bbox_inches= 'tight')
+fig3.savefig("adjusted_OLS_ratings.png",bbox_inches= 'tight')
 
-fig4, OLS_rev = plt.subplots()
-OLS_rev.axis('off')
+# fig4, OLS_rev = plt.subplots()
+# OLS_rev.axis('off')
 
-OLS_rev.text(0,1,rev_model_OLS.summary().as_text(), fontsize=10,fontfamily='monospace',va='top')
-# fig4.savefig('OLS_rev.png',bbox_inches='tight')
+# OLS_rev.text(0,1,rev_model_OLS.summary().as_text(), fontsize=10,fontfamily='monospace',va='top')
+# # fig4.savefig('OLS_rev.png',bbox_inches='tight')
