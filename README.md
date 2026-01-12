@@ -6,7 +6,7 @@ This project build a machine learning model to predict the movie ratings based o
 ## Collect Data Process
 1. Collecting data 
     - [TMDB](https://developer.themoviedb.org/docs/getting-started), The Movie Database to access movies data
-    - First to have an account and generate your own API key with given instructions by this link [Sign up](https://www.themoviedb.org/settings/api). The API key will be used to access movies information
+    - First to have an account and generate your own API read access token with given instructions by this link [Sign up](https://www.themoviedb.org/settings/api). The API access token will be used to access movies information
     - When signing up, it will ask for application URL or the link of the project that you will use the movie database for, I did because I didn't have any link for the project: (http://127.0.0.1:5000/not/a/URL)
     
 2. Download the [dataset](./tmdb_5000_credits.csv) to access movie id. Can be opened in excel to view the file
@@ -57,5 +57,5 @@ Preview of Data: ![alt text](./Images/Data_Preview.png)
 **CONCLUSION:** 
 - The performance did not change based on the R^2 value after removing the non-contributing features
 - So the hypothesis test indicate that the genres: Action, Animation, Comedy, Crime, Documentary, Drama, History, Horror, Science Fiction, Thriller, War do have linear relationship with movie ratings. 
-- The genres-only model only explains about 10% of the actual ratings but still matters, and more features can be applied to predict the ratings data. The model shows there are still some linear relationship between the genres and the movie ratings
+- The genres-only model only explains 10% of the actual ratings but still matters, and more features can be applied to predict the ratings data. The model shows there are still some linear relationship between the genres and the movie ratings
 
